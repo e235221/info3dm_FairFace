@@ -1,0 +1,4 @@
+# 仮想環境
+fairface_env/
+# 学習済みモデル
+fair_face_models/*.pt
