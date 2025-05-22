@@ -1,18 +1,16 @@
 ### FairFaceとは
+注. 山脇が勝手に書いてます。気にしないでください。
 
 - 知能情報総合実験　データマイニング班で扱うデータセット
 - ref. https://github.com/dchen236/FairFace
 
 # ディレクトリ構造 
-- fair_face_models
+- fair_face_models/
   - google driveに共有された事前学習済みモデルをダウンロード￼：
-- race_4モデル（White, Black, Asian, Indian）
-- race_7モデル（White, Black, Latino_Hispanic, East, Southeast Asian, Indian, Middle Eastern）
+  - race_4モデル（White, Black, Asian, Indian）
+  - race_7モデル（White, Black, Latino_Hispanic, East, Southeast Asian, Indian, Middle Eastern）
+  - ref. https://drive.google.com/drive/folders/1F_pXfbzWvG-bhCpNsRj6F_xsdjpesiFu
 
-ref. https://drive.google.com/drive/folders/1F_pXfbzWvG-bhCpNsRj6F_xsdjpesiFu
-
-
-## 各ファイルの説明
 - predict.py
   - 検出された顔画像に対して、各属性の予測結果（人種、性別、年齢など）とそれに対応するスコアをCSVファイルとして出力します
 
@@ -44,9 +42,9 @@ fairface/ および fairface_env/
 test/
 プロジェクトの動作確認や検証を目的としたテストコード、テストスクリプトが配置されているフォルダです。
 
-以上のように、FairFaceリポジトリは顔検出および属性推論のためのスクリプト、使用する事前学習済みモデル、データ管理用ファイル、そして各種補助資料やテストコードで構成されています。
 
-#### NoteBookLMにWhitePaperを読み込ませた
+# 要約
+NoteBookLMにWhitePaperを読み込ませた。
 
 主なトピック：
 提供された論文は、顔画像データセットに存在する強い人種的バイアスと、それが機械学習モデルの性能および公平性に与える影響を指摘し、この問題に対処するための新規データセットであるFairFaceを提案した研究である [1-3]。
@@ -62,13 +60,3 @@ test/
 LatinoおよびMiddle Easternを含み、East AsianとSoutheast Asianを区別した、初めての大規模なin-the-wild顔属性データセットを提供した点。
 結論として、FairFaceデータセットは、コンピュータービジョンシステムにおけるバイアスを測定し軽減するための重要なリソースであり、公正なAIシステムの開発を促進することに貢献すると述べている [24, 29, 30]。データセット、コード、モデルは公開されている [21]。
 
-
-# memo 
-# 機械学習の進め方
-
-- データセット構築　...fair faceを使う
-  - データ前処理は，データセット使うから問題ない。
-- メインの部分：モデルの選定・構築
-  - 分類問題のモデル
-- モデルの学習
-- 評価
