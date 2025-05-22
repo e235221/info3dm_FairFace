@@ -12,7 +12,39 @@
 ref. https://drive.google.com/drive/folders/1F_pXfbzWvG-bhCpNsRj6F_xsdjpesiFu
 
 
-- 
+## 各ファイルの説明
+- predict.py
+  - 検出された顔画像に対して、各属性の予測結果（人種、性別、年齢など）とそれに対応するスコアをCSVファイルとして出力します
+
+- predict_bbox.py
+	- 検出された顔画像に対して、各属性の予測結果（人種、性別、年齢など）とそれに対応するスコアをCSVファイルとして出力します。（predict.pyと同様。）
+	- それに加え，検出された顔のバウンディングボックス情報もCSVファイルに含めます。
+
+test_imgs.csv
+推論対象となるテスト画像のファイルパスが記載されたサンプルCSVファイルです。各画像のパスは "img_path" カラムで指定されています。
+
+test_outputs.csv
+predict.pyまたはpredict_bbox.pyの実行後に生成される出力結果のCSVファイルです。各顔画像に対する属性の予測結果（および predict_bbox.py の場合はバウンディングボックス情報）がまとめられています。
+
+detected_faces/
+dlibの顔検出により、1つの画像から複数の顔が検出された場合に、切り出した各顔画像が保存されるフォルダです。
+
+dlib_models/
+dlib の顔検出用の事前学習済みモデル（通常、mmod_human_face_detector.dat やshape_predictor_5_face_landmarks.datなど）が配置されています。
+
+examples/
+プロジェクトで利用するためのサンプル画像が含まれており、README.md内のプレビュー画像などで利用されています。
+
+fair_face_models/
+事前学習済みのフェイス属性推論モデル（ResNet34ベースなど）の.ptファイルが配置されています。predict.py や predict_bbox.py はこれらのモデルファイルをロードして推論を実施します。
+
+fairface/ および fairface_env/
+プロジェクト内で使用するPythonの仮想環境（venv）がセットアップされているディレクトリです。各種シェル（Bash, Fish, PowerShellなど）用の有効化スクリプトや依存ライブラリが含まれます。
+
+test/
+プロジェクトの動作確認や検証を目的としたテストコード、テストスクリプトが配置されているフォルダです。
+
+以上のように、FairFaceリポジトリは顔検出および属性推論のためのスクリプト、使用する事前学習済みモデル、データ管理用ファイル、そして各種補助資料やテストコードで構成されています。
 
 #### NoteBookLMにWhitePaperを読み込ませた
 
@@ -29,3 +61,14 @@ ref. https://drive.google.com/drive/folders/1F_pXfbzWvG-bhCpNsRj6F_xsdjpesiFu
 3.
 LatinoおよびMiddle Easternを含み、East AsianとSoutheast Asianを区別した、初めての大規模なin-the-wild顔属性データセットを提供した点。
 結論として、FairFaceデータセットは、コンピュータービジョンシステムにおけるバイアスを測定し軽減するための重要なリソースであり、公正なAIシステムの開発を促進することに貢献すると述べている [24, 29, 30]。データセット、コード、モデルは公開されている [21]。
+
+
+# memo 
+# 機械学習の進め方
+
+- データセット構築　...fair faceを使う
+  - データ前処理は，データセット使うから問題ない。
+- メインの部分：モデルの選定・構築
+  - 分類問題のモデル
+- モデルの学習
+- 評価

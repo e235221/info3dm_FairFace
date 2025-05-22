@@ -12,6 +12,10 @@ import dlib
 import os
 import argparse
 
+'''
+検出された顔画像に対して、各属性の予測結果（人種、性別、年齢など）とそれに対応するスコアをCSVファイルとして出力
+'''
+
 def rect_to_bb(rect):
 	# take a bounding predicted by dlib and convert it
 	# to the format (x, y, w, h) as we would normally do
