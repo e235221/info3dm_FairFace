@@ -68,7 +68,7 @@ fair_face_models/
 fairface/ および fairface_env/
 プロジェクト内で使用するPythonの仮想環境（venv）がセットアップされているディレクトリです。各種シェル（Bash, Fish, PowerShellなど）用の有効化スクリプトや依存ライブラリが含まれます。
 
-## 画像のリサイズについて
+# 画像のリサイズについて
 `predict_bbox.py`:
 コード内で画像のリサイズは以下の2段階で行われています。
 全体リサイズ (検出前の前処理):
@@ -77,6 +77,8 @@ fairface/ および fairface_env/
 顔切り出し後のリサイズ:
 dlib の get_face_chips により切り出された顔画像は、関数呼び出し時に渡された size パラメータ（この例では 300）により 300✖️300 ピクセルにリサイズされ、その後、推論の前処理として transforms.Resize((224, 224)) により 224✖️224 ピクセルに変換されます。
 
+# トラブルシューティング
+detected_facesに`.DS_store`(Macの隠しファイル)が入っていれば，うまく実行できないので削除すること。
 
 # 要約
 NoteBookLMにWhitePaperを読み込ませた。

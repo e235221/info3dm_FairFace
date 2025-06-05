@@ -95,7 +95,9 @@ def detect_face(image_paths, SAVE_DETECTED_AT, default_max_size=800, size=300, p
 
 def predidct_age_gender_race(save_prediction_at, bboxes, imgs_path='cropped_faces/'):
     # 指定ディレクトリ内のすべての顔画像ファイルパスをリストにまとめる
-    img_names = [os.path.join(imgs_path, x) for x in os.listdir(imgs_path)]
+    valid_ext = ('.jpg', '.jpeg', '.png')
+    img_names = [os.path.join(imgs_path, x) for x in os.listdir(imgs_path)
+                 if x.lower().endswith(valid_ext)]
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
     # 事前学習済みのResNet34モデルを読み込み、最終層を属性分類用に変更する
