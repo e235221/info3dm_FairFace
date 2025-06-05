@@ -4,6 +4,31 @@
 - 知能情報総合実験　データマイニング班で扱うデータセット
 - ref. https://github.com/dchen236/FairFace
 
+# run
+`python3 predict.py --csv test_imgs.csv`
+
+## 変更内容
+#### 概要
+- 2025/05/29
+	- もともとtestディレクトリに画像を入れて，`test_img.csv`にそのpathを入力して学習する流れ
+	- 1枚の画像に2つの顔があった時にResNet 34がどう処理するのかを確認するために，testにある画像並びにpathを変更した。
+	- => run `predict_bbox.py`
+
+#### 実行結果
+`test_imgs.csv`；入力画像のpathが入ったcsvファイル
+```zsh
+(fairface_env) (base) yamawakidaiki@DMacBook-Air FairFace % python3 predict.py --csv "test_imgs.csv"
+using CUDA?: True
+---0/1---
+detected faces are saved at  detected_faces
+Predicting... 0/7
+saved results at  test_outputs.csv
+(fairface_env) (base) yamawakidaiki@DMacBook-Air FairFace % 
+```
+#### 実行結果
+1枚の画像につき2つの顔がある場合，正しく2つの顔が別々に認識できていた。
+
+
 # ディレクトリ構造 
 - fair_face_models/
   - google driveに共有された事前学習済みモデルをダウンロード￼：
@@ -17,6 +42,10 @@
 - predict_bbox.py
 	- 検出された顔画像に対して、各属性の予測結果（人種、性別、年齢など）とそれに対応するスコアをCSVファイルとして出力します。（predict.pyと同様。）
 	- それに加え，検出された顔のバウンディングボックス情報もCSVファイルに含めます。
+
+- ★test/
+  - 入力したい画像をここに置いておく。
+  - 入力したい画像のpathを`test_imgs.csv`に保存する！！
 
 test_imgs.csv
 推論対象となるテスト画像のファイルパスが記載されたサンプルCSVファイルです。各画像のパスは "img_path" カラムで指定されています。
@@ -39,8 +68,14 @@ fair_face_models/
 fairface/ および fairface_env/
 プロジェクト内で使用するPythonの仮想環境（venv）がセットアップされているディレクトリです。各種シェル（Bash, Fish, PowerShellなど）用の有効化スクリプトや依存ライブラリが含まれます。
 
-test/
-プロジェクトの動作確認や検証を目的としたテストコード、テストスクリプトが配置されているフォルダです。
+## 画像のリサイズについて
+`predict_bbox.py`:
+コード内で画像のリサイズは以下の2段階で行われています。
+全体リサイズ (検出前の前処理):
+元画像は大きさに応じて、最大幅または最大高さが 800 ピクセルになるようにリサイズされます（縦横比は維持されます）。
+
+顔切り出し後のリサイズ:
+dlib の get_face_chips により切り出された顔画像は、関数呼び出し時に渡された size パラメータ（この例では 300）により 300✖️300 ピクセルにリサイズされ、その後、推論の前処理として transforms.Resize((224, 224)) により 224✖️224 ピクセルに変換されます。
 
 
 # 要約
