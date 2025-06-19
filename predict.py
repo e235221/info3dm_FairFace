@@ -16,6 +16,7 @@ import argparse
 検出された顔画像に対して、各属性の予測結果（人種、性別、年齢など）とそれに対応するスコアをCSVファイルとして出力
 '''
 
+
 def rect_to_bb(rect):
 	# take a bounding predicted by dlib and convert it
 	# to the format (x, y, w, h) as we would normally do
@@ -27,13 +28,14 @@ def rect_to_bb(rect):
 	# return a tuple of (x, y, w, h)
 	return (x, y, w, h)
 
-def detect_face(image_paths,  SAVE_DETECTED_AT, default_max_size=800,size = 300, padding = 0.25):
+
+def detect_face(image_paths, SAVE_DETECTED_AT, default_max_size=800, size=300, padding=0.25):
     cnn_face_detector = dlib.cnn_face_detection_model_v1('dlib_models/mmod_human_face_detector.dat')
     sp = dlib.shape_predictor('dlib_models/shape_predictor_5_face_landmarks.dat')
     base = 2000  # largest width and height
     for index, image_path in enumerate(image_paths):
         if index % 1000 == 0:
-            print('---%d/%d---' %(index, len(image_paths)))
+            print('---%d/%d---' % (index, len(image_paths)))
         img = dlib.load_rgb_image(image_path)
 
         old_height, old_width, _ = img.shape
@@ -41,7 +43,7 @@ def detect_face(image_paths,  SAVE_DETECTED_AT, default_max_size=800,size = 300,
         if old_width > old_height:
             new_width, new_height = default_max_size, int(default_max_size * old_height / old_width)
         else:
-            new_width, new_height =  int(default_max_size * old_width / old_height), default_max_size
+            new_width, new_height = int(default_max_size * old_width / old_height), default_max_size
         img = dlib.resize_image(img, rows=new_height, cols=new_width)
 
         dets = cnn_face_detector(img, 1)
@@ -54,14 +56,15 @@ def detect_face(image_paths,  SAVE_DETECTED_AT, default_max_size=800,size = 300,
         for detection in dets:
             rect = detection.rect
             faces.append(sp(img, rect))
-        images = dlib.get_face_chips(img, faces, size=size, padding = padding)
+        images = dlib.get_face_chips(img, faces, size=size, padding=padding)
         for idx, image in enumerate(images):
             img_name = image_path.split("/")[-1]
             path_sp = img_name.split(".")
-            face_name = os.path.join(SAVE_DETECTED_AT,  path_sp[0] + "_" + "face" + str(idx) + "." + path_sp[-1])
+            face_name = os.path.join(SAVE_DETECTED_AT, path_sp[0] + "_" + "face" + str(idx) + "." + path_sp[-1])
             dlib.save_image(image, face_name)
 
-def predidct_age_gender_race(save_prediction_at, imgs_path = 'cropped_faces/'):
+
+def predidct_age_gender_race(save_prediction_at, imgs_path='cropped_faces/'):
     img_names = [os.path.join(imgs_path, x) for x in os.listdir(imgs_path)]
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
@@ -76,7 +79,7 @@ def predidct_age_gender_race(save_prediction_at, imgs_path = 'cropped_faces/'):
 
     model_fair_4 = torchvision.models.resnet34(pretrained=True)
     model_fair_4.fc = nn.Linear(model_fair_4.fc.in_features, 18)
-    #res34_fair_align_multi_4_20190809.ptに変更
+    # res34_fair_align_multi_4_20190809.ptに変更
     state_dict = torch.load('fair_face_models/res34_fair_align_multi_4_20190809.pt', map_location=device)
     model_fair_4.load_state_dict(state_dict)
     model_fair_4 = model_fair_4.to(device)
@@ -208,10 +211,9 @@ def ensure_dir(directory):
         os.makedirs(directory)
 
 
-
 if __name__ == "__main__":
-    #Please create a csv with one column 'img_path', contains the full paths of all images to be analyzed.
-    #Also please change working directory to this file.
+    # Please create a csv with one column 'img_path', contains the full paths of all images to be analyzed.
+    # Also please change working directory to this file.
     parser = argparse.ArgumentParser()
     parser.add_argument('--csv', dest='input_csv', action='store',
                         help='csv file of image path where col name for image path is "img_path')
@@ -223,5 +225,6 @@ if __name__ == "__main__":
     imgs = pd.read_csv(args.input_csv)['img_path']
     detect_face(imgs, SAVE_DETECTED_AT)
     print("detected faces are saved at ", SAVE_DETECTED_AT)
-    #Please change test_outputs.csv to actual name of output csv. 
+    # Please change test_outputs.csv to actual name of output csv. 
     predidct_age_gender_race("test_outputs.csv", SAVE_DETECTED_AT)
+

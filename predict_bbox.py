@@ -12,8 +12,9 @@ import dlib
 import os
 import argparse
 
+
 def rect_to_bb(rect):
-	# take a bounding predicted by dlib and convert it
+    	# take a bounding predicted by dlib and convert it
 	# to the format (x, y, w, h) as we would normally do
 	# with OpenCV
 	x = rect.left()
@@ -23,14 +24,16 @@ def rect_to_bb(rect):
 	# return a tuple of (x, y, w, h)
 	return (x, y, w, h)
 
-def reverse_resized_rect(rect,resize_ratio):
+
+def reverse_resized_rect(rect, resize_ratio):
     l = int(rect.left() / resize_ratio)
     t = int(rect.top() / resize_ratio)
     r = int(rect.right() / resize_ratio)
     b = int(rect.bottom() / resize_ratio)
-    new_rect = dlib.rectangle(l,t,r,b)
+    new_rect = dlib.rectangle(l, t, r, b)
 
-    return [l,t,r,b] , new_rect
+    return [l, t, r, b] , new_rect
+
 
 # def detect_face(image_paths, SAVE_DETECTED_AT, default_max_size=800, size=300, padding=0.25):
 def detect_face(image_paths, SAVE_DETECTED_AT, default_max_size=800, size=300, padding=1.25):
@@ -38,7 +41,7 @@ def detect_face(image_paths, SAVE_DETECTED_AT, default_max_size=800, size=300, p
     cnn_face_detector = dlib.cnn_face_detection_model_v1('dlib_models/mmod_human_face_detector.dat')
     sp = dlib.shape_predictor('dlib_models/shape_predictor_5_face_landmarks.dat')
     base = 2000  # 最大幅・高さの基準値
-    rects = []   # 元の画像上での顔のバウンディングボックスを保存するリスト
+    rects = []  # 元の画像上での顔のバウンディングボックスを保存するリスト
 
     for index, image_path in enumerate(image_paths):
         # 進捗表示: 1000 枚ごとに出力
@@ -56,7 +59,7 @@ def detect_face(image_paths, SAVE_DETECTED_AT, default_max_size=800, size=300, p
             new_width, new_height = default_max_size, int(old_height * resize_ratio)
         else:
             resize_ratio = default_max_size / old_height
-            new_width, new_height =  int(old_width * resize_ratio), default_max_size
+            new_width, new_height = int(old_width * resize_ratio), default_max_size
         
         # dlib を使って画像をリサイズ
         img = dlib.resize_image(img, cols=new_width, rows=new_height)
@@ -93,6 +96,7 @@ def detect_face(image_paths, SAVE_DETECTED_AT, default_max_size=800, size=300, p
     # 元画像上での全顔のバウンディングボックスのリストを返す
     return rects
 
+
 def predidct_age_gender_race(save_prediction_at, bboxes, imgs_path='cropped_faces/'):
     # 指定ディレクトリ内のすべての顔画像ファイルパスをリストにまとめる
     valid_ext = ('.jpg', '.jpeg', '.png')
@@ -118,9 +122,9 @@ def predidct_age_gender_race(save_prediction_at, bboxes, imgs_path='cropped_face
 
     # 画像前処理のパイプライン（リサイズ、テンソル変換、正規化）を定義
     trans = transforms.Compose([
-        transforms.ToPILImage(),                    # PIL形式に変換
-        transforms.Resize((224, 224)),                # 224x224にリサイズ
-        transforms.ToTensor(),                        # テンソルに変換
+        transforms.ToPILImage(),  # PIL形式に変換
+        transforms.Resize((224, 224)),  # 224x224にリサイズ
+        transforms.ToTensor(),  # テンソルに変換
         transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])  # 正規化
     ])
 
@@ -246,7 +250,6 @@ def predidct_age_gender_race(save_prediction_at, bboxes, imgs_path='cropped_face
 def ensure_dir(directory):
     if not os.path.exists(directory):
         os.makedirs(directory)
-
 
 
 if __name__ == "__main__":
