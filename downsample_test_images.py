@@ -18,7 +18,7 @@ def setup_logging():
     )
 
 
-def downsample_image(image_path, output_path, target_size=(224, 224), quality=85):
+def downsample_image(image_path, output_path, target_size=(128, 128), quality=85):
     """
     画像をダウンサンプリングします。
     
@@ -50,7 +50,7 @@ def downsample_image(image_path, output_path, target_size=(224, 224), quality=85
         return False
 
 
-def downsample_images(input_dir, output_dir, target_size=(224, 224), quality=85, 
+def downsample_images(input_dir, output_dir, target_size=(128, 128), quality=85, 
                      max_files=None, overwrite=True):
     """
     指定されたディレクトリ内の画像をダウンサンプリングします。
@@ -117,8 +117,8 @@ def main():
     parser = argparse.ArgumentParser(description='画像のダウンサンプリング')
     parser.add_argument('--input_dir', default='test', help='入力画像ディレクトリ')
     parser.add_argument('--output_dir', default='test_downsampled', help='出力画像ディレクトリ')
-    parser.add_argument('--width', type=int, default=224, help='目標幅')
-    parser.add_argument('--height', type=int, default=224, help='目標高さ')
+    parser.add_argument('--width', type=int, default=128, help='目標幅')
+    parser.add_argument('--height', type=int, default=128, help='目標高さ')
     parser.add_argument('--quality', type=int, default=85, help='JPEG品質 (1-100)')
     parser.add_argument('--max_files', type=int, help='処理する最大ファイル数')
     parser.add_argument('--no_overwrite', action='store_true', help='既存ファイルを上書きしない')
@@ -147,3 +147,4 @@ def main():
 
 if __name__ == "__main__":
     main() 
+

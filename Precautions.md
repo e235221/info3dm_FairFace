@@ -36,6 +36,9 @@ ModuleNotFoundError: No module named 'PIL'
 
 ### 1. 色調変化 (color_change.py)
 
+**入力元**: `AfterPretreatment`フォルダ
+**保存先**: `AfterColorJitter`フォルダ
+
 **設定箇所**: 6行目〜9行目
 ```python
 SRC_DIR = 'AfterPretreatment'          # 元画像のディレクトリ
@@ -50,6 +53,9 @@ HUE_RANGE = (-0.1, 0.1)               # 色相シフトの範囲
 - 注意: 色相範囲は-0.1〜0.1と-10〜10で大きな違いは見られませんでした
 
 ### 2. コントラスト調整 (contrast.py)
+
+**入力元**: `AfterPretreatment`フォルダ
+**保存先**: `AfterContrast`フォルダ
 
 **設定箇所**: 5行目〜8行目
 ```python
@@ -67,6 +73,9 @@ CONTRAST_RANGE = (10, 20)              # コントラスト係数の範囲
 - 係数を調整したい場合: 括弧内の数値を変更
 
 ### 3. 画像回転 (rotate.py)
+
+**入力元**: `AfterPretreatment`フォルダ
+**保存先**: `AfterRotate`フォルダ
 
 **設定箇所**: 5行目〜8行目
 ```python
@@ -94,31 +103,129 @@ python3 AfterLeftRightFlip.py
 ```
 - 保存先: `AfterLeftRightFlip` フォルダ
 
-## 📈 アップサンプリング機能
+## 📈 アップサンプリング機能（写真複製）
 
 ### 前処理前のアップサンプリング
 
 **ファイル**: `BeforePretreatment.py`
 **配置場所**: `/Users/nagase/info3dm_FairFace/BeforePretreatment.py`
+**入力元**: `test`フォルダ
+**保存先**: `BeforePretreatment`フォルダ
 
 **実行コマンド**:
 ```bash
 python3 BeforePretreatment.py --csv "test_outputs.csv" --input_dir "test" --output_dir "BeforePretreatment" --target_samples 100
 ```
 
-**結果**: `BeforePretreatment` フォルダにアップサンプリング済み画像が保存されます
-
 ### 前処理後のアップサンプリング
 
 **ファイル**: `AfterPretreatment.py`
 **配置場所**: FairFace階層に`AfterPretreatment.py`を配置
+**入力元**: `detected_faces`フォルダ
+**保存先**: `AfterPretreatment`フォルダ
 
 **実行コマンド**:
 ```bash
 python3 AfterPretreatment.py --input_dir detected_faces --output_dir AfterPretreatment --csv test_outputs.csv
 ```
 
-**結果**: `AfterPretreatment` フォルダにアップサンプリング済み画像が保存されます
+## 📊 解像度変更機能
+
+### 前処理画像の解像度変更
+
+#### ダウンサンプリング（解像度低下）
+**ファイル**: `downsample_detected_faces.py`
+**入力元**: `detected_faces`フォルダ（前処理された画像）
+**保存先**: `detected_faces_downsampled`フォルダ
+
+**設定箇所**:
+- 21行目の`target_size`
+- 53行目の`target_size`
+- 119〜120行目の`default`の値
+
+**実行方法**:
+```bash
+python3 downsample_detected_faces.py
+# または
+python downsample_detected_faces.py
+```
+
+**注意**: ターミナルから`python downsample_detected_faces.py --width 128 --height 128`と指定しても意味がないので、コードの中の数値を変更してください
+
+#### アップサンプリング（解像度上昇）
+**ファイル**: `upsample_detected_faces.py`
+**入力元**: `detected_faces`フォルダ（前処理された画像）
+**保存先**: `detected_faces_upsampled`フォルダ
+
+**設定箇所**:
+- 21行目の`target_size`
+- 53行目の`target_size`
+- 119〜120行目の`default`の値
+
+**実行方法**:
+```bash
+python3 upsample_detected_faces.py
+# または
+python upsample_detected_faces.py
+```
+
+**追加オプション**:
+```bash
+python3 upsample_detected_faces.py --max_files 5
+```
+※ファイルに保存される中身の数を指定可能
+
+### 前処理前画像の解像度変更
+
+#### ダウンサンプリング（解像度低下）
+**ファイル**: `downsample_test_images.py`
+**入力元**: `test`フォルダ（前処理前の画像）
+**保存先**: `test_downsampled`フォルダ
+
+**設定箇所**:
+- 21行目の`target_size`
+- 53行目の`target_size`
+- 119〜120行目の`default`の値
+
+**実行方法**:
+```bash
+python3 downsample_test_images.py
+# または
+python downsample_test_images.py
+```
+
+#### アップサンプリング（解像度上昇）
+**ファイル**: `upsample_test_images.py`
+**入力元**: `test`フォルダ（前処理前の画像）
+**保存先**: `test_upsampled`フォルダ
+
+**設定箇所**:
+- 21行目の`target_size`
+- 53行目の`target_size`
+- 119〜120行目の`default`の値
+
+**実行方法**:
+```bash
+python3 upsample_test_images.py
+# または
+python upsample_test_images.py
+```
+
+## 📊 処理の流れ一覧表
+
+| 処理種別 | 入力元フォルダ | 保存先フォルダ | 実行ファイル | 実行コマンド |
+|---------|-------------|-------------|-------------|-------------|
+| **前処理前アップサンプリング** | `test` | `BeforePretreatment` | `BeforePretreatment.py` | `python3 BeforePretreatment.py --csv "test_outputs.csv" --input_dir "test" --output_dir "BeforePretreatment" --target_samples 100` |
+| **前処理後アップサンプリング** | `detected_faces` | `AfterPretreatment` | `AfterPretreatment.py` | `python3 AfterPretreatment.py --input_dir detected_faces --output_dir AfterPretreatment --csv test_outputs.csv` |
+| **前処理前左右反転** | `test` | `BeforeLeftRightFlip` | `BeforeLeftRightFlip.py` | `python3 BeforeLeftRightFlip.py` |
+| **前処理後左右反転** | `detected_faces` | `AfterLeftRightFlip` | `AfterLeftRightFlip.py` | `python3 AfterLeftRightFlip.py` |
+| **色調変化** | `AfterPretreatment` | `AfterColorJitter` | `color_change.py` | `python3 color_change.py` |
+| **コントラスト調整** | `AfterPretreatment` | `AfterContrast` | `contrast.py` | `python3 contrast.py` |
+| **画像回転** | `AfterPretreatment` | `AfterRotate` | `rotate.py` | `python3 rotate.py` |
+| **前処理後ダウンサンプリング** | `detected_faces` | `detected_faces_downsampled` | `downsample_detected_faces.py` | `python3 downsample_detected_faces.py` |
+| **前処理後アップサンプリング（解像度）** | `detected_faces` | `detected_faces_upsampled` | `upsample_detected_faces.py` | `python3 upsample_detected_faces.py` |
+| **前処理前ダウンサンプリング** | `test` | `test_downsampled` | `downsample_test_images.py` | `python3 downsample_test_images.py` |
+| **前処理前アップサンプリング（解像度）** | `test` | `test_upsampled` | `upsample_test_images.py` | `python3 upsample_test_images.py` |
 
 ## 📁 ディレクトリ構造
 
@@ -131,17 +238,32 @@ python3 AfterPretreatment.py --input_dir detected_faces --output_dir AfterPretre
 ├── color_change.py
 ├── contrast.py
 ├── rotate.py
-├── test/                    # 入力画像
-├── detected_faces/          # 検出された顔画像
-├── BeforePretreatment/      # 前処理前アップサンプリング結果
-├── AfterPretreatment/       # 前処理後アップサンプリング結果
-├── BeforeLeftRightFlip/     # 前処理前左右反転結果
-├── AfterLeftRightFlip/      # 前処理後左右反転結果
-├── AfterColorJitter/        # 色調変化結果
-├── AfterContrast/           # コントラスト調整結果
-└── AfterRotate/             # 回転処理結果
+├── downsample_detected_faces.py
+├── upsample_detected_faces.py
+├── downsample_test_images.py
+├── upsample_test_images.py
+├── test/                           # 入力画像（前処理前）
+├── detected_faces/                 # 検出された顔画像（前処理後）
+├── BeforePretreatment/             # 前処理前アップサンプリング結果
+├── AfterPretreatment/              # 前処理後アップサンプリング結果
+├── BeforeLeftRightFlip/            # 前処理前左右反転結果
+├── AfterLeftRightFlip/             # 前処理後左右反転結果
+├── AfterColorJitter/               # 色調変化結果
+├── AfterContrast/                  # コントラスト調整結果
+├── AfterRotate/                    # 回転処理結果
+├── detected_faces_downsampled/     # 前処理後ダウンサンプリング結果
+├── detected_faces_upsampled/       # 前処理後アップサンプリング結果
+├── test_downsampled/               # 前処理前ダウンサンプリング結果
+└── test_upsampled/                 # 前処理前アップサンプリング結果
 ```
 
 ## 🎯 使用目的
 
 このシステムは、画像処理における前処理のタイミングによる効果の違いを検証し、より良い精度と評価結果を得るために開発されました。両方のアプローチを比較することで、最適な手法を選択できます。
+
+## 📝 用語説明
+
+- **前処理前**: 元の画像（testディレクトリ）
+- **前処理後**: 検出された顔画像（detected_facesディレクトリ）
+- **アップサンプリング**: 解像度を上げる処理
+- **ダウンサンプリング**: 解像度を下げる処理
