@@ -1,3 +1,10 @@
+7/10追加
+各コードの説明をPrecautions.mdに追加したのでコードを動かす場合は参照して下さいs
+
+
+
+
+
 # FairFace: Face Attribute Dataset for Balanced Race, Gender, and Age
 注. 山脇が勝手に翻訳しました。
 
