@@ -23,6 +23,12 @@ PIL: 9.4.0
 - 正しい例: `python3 BeforeLeftRightFlip.py` ✅
 - 間違った例: `Python3 BeforeLeftRightFlip.py` ❌
 
+**写真の背景白黒変換（hakei.py）の注意**
+- **必ず`python`コマンドで実行してください**
+- `python3`で実行するとcv2エラーが発生します
+- 正しい例: `python hakei.py` ✅
+- 間違った例: `python3 hakei.py` ❌
+
 ```bash
 # エラー例
 (base) nagase@nagaseisshounoMacBook-Air info3dm_FairFace % Python3 BeforeLeftRightFlip.py
@@ -72,7 +78,7 @@ CONTRAST_RANGE = (10, 20)              # コントラスト係数の範囲
 - ディレクトリ名を変更したい場合: シングルクォーテーション内を変更
 - 係数を調整したい場合: 括弧内の数値を変更
 
-### 3. 画像回転 (rotate.py)
+### 4. 画像回転 (rotate.py)
 
 **入力元**: `AfterPretreatment`フォルダ
 **保存先**: `AfterRotate`フォルダ
@@ -88,6 +94,20 @@ ANGLE_RANGE = (-15, 15)                # 回転角度の範囲（度）
 **カスタマイズ方法**:
 - ディレクトリ名を変更したい場合: シングルクォーテーション内を変更
 - 回転角度を調整したい場合: 括弧内の数値を変更
+
+### 5. 写真の背景白黒変換 (hakei.py)
+
+**ファイル**: `hakei.py`
+**実行方法**: 
+```bash
+python hakei.py
+```
+
+**⚠️ 重要な注意事項**:
+- **必ず`python`コマンドで実行してください**
+- `python3`で実行するとcv2エラーが発生します
+- 正しい例: `python hakei.py` ✅
+- 間違った例: `python3 hakei.py` ❌（cv2エラー）
 
 ## 🔄 左右反転機能
 
@@ -222,6 +242,7 @@ python upsample_test_images.py
 | **色調変化** | `AfterPretreatment` | `AfterColorJitter` | `color_change.py` | `python3 color_change.py` |
 | **コントラスト調整** | `AfterPretreatment` | `AfterContrast` | `contrast.py` | `python3 contrast.py` |
 | **画像回転** | `AfterPretreatment` | `AfterRotate` | `rotate.py` | `python3 rotate.py` |
+| **写真の背景白黒変換** | - | - | `hakei.py` | `python hakei.py` |
 | **前処理後ダウンサンプリング** | `detected_faces` | `detected_faces_downsampled` | `downsample_detected_faces.py` | `python3 downsample_detected_faces.py` |
 | **前処理後アップサンプリング（解像度）** | `detected_faces` | `detected_faces_upsampled` | `upsample_detected_faces.py` | `python3 upsample_detected_faces.py` |
 | **前処理前ダウンサンプリング** | `test` | `test_downsampled` | `downsample_test_images.py` | `python3 downsample_test_images.py` |
@@ -238,6 +259,7 @@ python upsample_test_images.py
 ├── color_change.py
 ├── contrast.py
 ├── rotate.py
+├── hakei.py
 ├── downsample_detected_faces.py
 ├── upsample_detected_faces.py
 ├── downsample_test_images.py
