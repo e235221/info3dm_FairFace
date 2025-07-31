@@ -18,7 +18,7 @@ def setup_logging():
     )
 
 
-def upsample_image(image_path, output_path, target_size=(512, 512), quality=95):
+def upsample_image(image_path, output_path, target_size=(512, 512), quality=50):
     """
     画像をアップサンプリングします（解像度を上げます）。
     
